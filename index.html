@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dywan Math Adventure — Game Promosi Interaktif</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --secondary: #d97706;
+            --accent: #f59e0b;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --white: #ffffff;
+            --danger: #ef4444;
+            --success: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-light); color: var(--text-dark); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+
+        .game-container { background: var(--white); width: 100%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; border: 2px solid #e2e8f0; position: relative; }
+        
+        /* Header Game */
+        .game-header { background: var(--primary-dark); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .game-title { font-weight: 800; font-size: 1.1rem; }
+        .lives { font-size: 1.2rem; color: #f43f5e; }
+
+        /* Screens */
+        .screen { padding: 25px 20px; display: none; }
+        .screen.active { display: block; }
+
+        /* Form Input */
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
+        
+        .btn-action { background: var(--secondary); color: var(--white); border: none; padding: 14px 20px; width: 100%; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
+        .btn-action:hover { background: #b45309; }
+
+        /* Stage Progress Bar */
+        .stage-map { display: flex; justify-content: space-between; margin-bottom: 20px; background: #e2e8f0; padding: 10px; border-radius: 10px; }
+        .stage-node { width: 28px; height: 28px; border-radius: 50%; background: #cbd5e1; color: var(--text-dark); display: grid; place-items: center; font-weight: 800; font-size: 0.8rem; }
+        .stage-node.active { background: var(--secondary); color: var(--white); transform: scale(1.1); }
+        .stage-node.passed { background: var(--primary); color: var(--white); }
+
+        /* Question Box */
+        .badge-level { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
+        .badge-lots { background: #dcfce7; color: #166534; }
+        .badge-mots { background: #fef3c7; color: #92400e; }
+        .badge-hots { background: #fee2e2; color: #991b1b; }
+
+        .question-text { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; line-height: 1.5; color: var(--primary-dark); }
+        
+        /* Options Grid */
+        .options-grid { display: grid; gap: 10px; }
+        .option-btn { background: #f1f5f9; border: 2px solid #cbd5e1; padding: 12px 15px; border-radius: 8px; text-align: left; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+        .option-btn:hover { border-color: var(--primary); background: #e2e8f0; }
+
+        /* Modal Pembahasan */
+        .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10; padding: 20px; justify-content: center; align-items: center; }
+        .modal-content { background: var(--white); padding: 20px; border-radius: 12px; text-align: center; }
+        .modal-content h3 { color: var(--danger); margin-bottom: 10px; }
+        .modal-content p { font-size: 0.95rem; margin-bottom: 15px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 4px solid var(--secondary); }
+
+        /* Scorecard */
+        .score-box { background: #f1f5f9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .score-num { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- Header -->
+    <div class="game-header">
+        <div class="game-title"><i class="fas fa-brain"></i> Dywan Math Challenge</div>
+        <div class="lives" id="livesContainer"><i class="fas fa-heart"></i> <i class="fas fa-heart"></i> <i class="fas fa-heart"></i></div>
+    </div>
+
+    <!-- Screen 1: Start Game -->
+    <div class="screen active" id="startScreen">
+        <h2 style="color:var(--primary-dark); margin-bottom: 10px; text-align:center;">Uji Kemampuan Matematika!</h2>
+        <p style="text-align:center; font-size:0.9rem; color:#64748b; margin-bottom: 20px;">Rasakan metode pembelajaran bertahap <b>I Do – We Do – You Do</b> dari Dywan Learning Center.</p>
+        
+        <div class="form-group">
+            <label>Nama Siswa:</label>
+            <input type="text" id="studentName" placeholder="Masukkan nama lengkap...">
+        </div>
+        <div class="form-group">
+            <label>Pilih Tingkat Sekolah:</label>
+            <select id="gradeSelect">
+                <option value="SD_LOW">SD Kelas 1 – 3 (Kelas Rendah)</option>
+                <option value="SD_HIGH">SD Kelas 4 – 6 (Kelas Tinggi)</option>
+                <option value="SMP">SMP Kelas 7 – 9</option>
+            </select>
+        </div>
+        <button class="btn-action" onclick="startGame()">Mulai Petualangan <i class="fas fa-arrow-right"></i></button>
+    </div>
+
+    <!-- Screen 2: Gameplay -->
+    <div class="screen" id="gameScreen">
+        <!-- Stage Progress Map (9 Stage) -->
+        <div class="stage-map" id="stageMap">
+            <!-- Dynamic Stage Nodes -->
+        </div>
+
+        <span class="badge-level" id="badgeLevel">LOTS</span>
+        <div class="question-text" id="questionText">Loading Soal...</div>
+
+        <div class="options-grid" id="optionsGrid">
+            <!-- Dynamic Options -->
+        </div>
+    </div>
+
+    <!-- Screen 3: Scorecard & Result -->
+    <div class="screen" id="resultScreen">
+        <h2 style="text-align:center; color:var(--primary-dark);">Hasil Evaluasi Belajar</h2>
+        <p style="text-align:center; font-size:0.85rem; color:#64748b; margin-bottom: 15px;" id="resultName"></p>
+        
+        <div class="score-box">
+            <div>Total Skor Kamu:</div>
+            <div class="score-num" id="finalScore">0</div>
+        </div>
+
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:12px; border-radius:8px; margin-bottom:20px; font-size:0.9rem;" id="analysisText">
+            <!-- Dynamic Analysis -->
+        </div>
+
+        <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20sudah%20selesai%20mencoba%20Game%20Matematika" target="_blank" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:#25d366;">
+            <i class="fab fa-whatsapp"></i> Konsultasi Hasil via WA
+        </a>
+    </div>
+
+    <!-- Modal Pembahasan (Jika Salah Jawab) -->
+    <div class="modal" id="explainModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-lightbulb"></i> Metode "I Do" Dywan</h3>
+            <p id="explainText">Pembahasan akan muncul di sini.</p>
+            <button class="btn-action" onclick="closeModal()">Coba Lagi <i class="fas fa-redo"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+// CONFIG: Ganti URL ini dengan Web App URL dari Google Apps Script kamu!
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLDQOK8wTyy1gXdh0HXkeB-79DC5zy3nkEYk57k7eB1i3qkUNGDP0qwL11MnObRnHDkw/exec";
+
+// BANK SOAL (LOTS, MOTS, HOTS per Jenjang - Masing-masing 3 Soal)
+const QUESTION_BANK = {
+    SD_LOW: {
+        LOTS: [
+            { q: "Hasil dari 15 + 28 adalah...", options: ["43", "41", "33", "45"], answer: "43", exp: "15 + 28 = 43. Tambahkan satuan terlebih dahulu (5+8=13), simpan 1 ke puluhan." },
+            { q: "Berapa hasil dari 7 x 6?", options: ["42", "36", "48", "40"], answer: "42", exp: "7 dikali 6 sama artinya dengan menjumlahkan angka 7 sebanyak 6 kali = 42." },
+            { q: "Hasil dari 50 - 18 adalah...", options: ["32", "38", "22", "34"], answer: "32", exp: "50 - 18 = 32." }
+        ],
+        MOTS: [
+            { q: "Budi punya 3 kotak pensil. Tiap kotak berisi 8 pensil. Berapa total pensil Budi?", options: ["24", "11", "18", "32"], answer: "24", exp: "Jumlah total = 3 kotak x 8 pensil = 24 pensil." },
+            { q: "Ibu membeli 35 kue, lalu dibagikan sama rata ke 5 anaknya. Tiap anak mendapat...", options: ["7 kue", "6 kue", "8 kue", "5 kue"], answer: "7 kue", exp: "35 kue : 5 anak = 7 kue per anak." },
+            { q: "Paman memiliki 4 kantong kelereng. Setiap kantong berisi 9 kelereng. Berapa total kelereng paman?", options: ["36", "32", "40", "28"], answer: "36", exp: "4 kantong x 9 kelereng = 36 kelereng." }
+        ],
+        HOTS: [
+            { q: "Aku sebuah angka. Jika aku ditambah 12 lalu dikurangi 5, hasilnya 20. Angka berapakah aku?", options: ["13", "15", "10", "12"], answer: "13", exp: "Hitung mundur: 20 + 5 = 25, lalu 25 - 12 = 13. Jadi angka awal adalah 13." },
+            { q: "Dua tahun lalu umur Ani 7 tahun. Berapa umur Ani 3 tahun yang akan datang?", options: ["12 tahun", "10 tahun", "11 tahun", "9 tahun"], answer: "12 tahun", exp: "Umur Ani sekarang = 7 + 2 = 9 tahun. 3 tahun lagi = 9 + 3 = 12 tahun." },
+            { q: "Di sebuah tempat parkir terdapat 5 sepeda motor dan 3 mobil. Berapa jumlah seluruh roda kendaraan di tempat parkir tersebut?", options: ["22 roda", "16 roda", "20 roda", "24 roda"], answer: "22 roda", exp: "(5 motor x 2 roda) + (3 mobil x 4 roda) = 10 + 12 = 22 roda." }
+        ]
+    },
+    SD_HIGH: {
+        LOTS: [
+            { q: "Hasil dari -12 + 25 adalah...", options: ["13", "-13", "37", "-37"], answer: "13", exp: "Penjumlahan beda tanda: 25 - 12 = 13 (mengikuti tanda angka terbesar)." },
+            { q: "KPK dari 6 dan 8 adalah...", options: ["24", "12", "48", "16"], answer: "24", exp: "Kelipatan 6: 6, 12, 18, 24... Kelipatan 8: 8, 16, 24... Kelipatan terkecil yang sama = 24." },
+            { q: "Hasil dari 12² adalah...", options: ["144", "124", "134", "154"], answer: "144", exp: "12 x 12 = 144." }
+        ],
+        MOTS: [
+            { q: "Sebuah persegi memiliki luas 144 cm². Berapa keliling persegi tersebut?", options: ["48 cm", "36 cm", "24 cm", "12 cm"], answer: "48 cm", exp: "Sisi = √144 = 12 cm. Keliling = 4 x sisi = 4 x 12 = 48 cm." },
+            { q: "Bentuk sederhana dari pecahan 18/24 adalah...", options: ["3/4", "2/3", "4/5", "1/2"], answer: "3/4", exp: "Bagi pembilang dan penyebut dengan FPB-nya (yaitu 6): 18:6 = 3, 24:6 = 4." },
+            { q: "Sebuah bak air berisi 120 liter. Jika dialirkan dengan debit 20 liter/menit, berapa menit waktu yang dibutuhkan hingga habis?", options: ["6 menit", "5 menit", "8 menit", "10 menit"], answer: "6 menit", exp: "Waktu = Volume / Debit = 120 / 20 = 6 menit." }
+        ],
+        HOTS: [
+            { q: "Sebuah bus berangkat pukul 07.00 dengan kecepatan 60 km/jam menuju kota B sejauh 180 km. Pukul berapa bus tiba?", options: ["10.00", "09.30", "10.30", "09.00"], answer: "10.00", exp: "Waktu = Jarak / Kecepatan = 180 / 60 = 3 jam. Tiba pukul 07.00 + 3 jam = 10.00." },
+            { q: "Rata-rata nilai 4 siswa adalah 80. Jika nilai Budi digabungkan, rata-ratanya menjadi 82. Berapa nilai Budi?", options: ["90", "88", "85", "92"], answer: "90", exp: "Total nilai 4 siswa = 4 x 80 = 320. Total nilai 5 siswa = 5 x 82 = 410. Nilai Budi = 410 - 320 = 90." },
+            { q: "Perbandingan uang Andi dan Budi 3 : 5. Jika selisih uang mereka Rp 20.000, berapa total uang mereka berdua?", options: ["Rp 80.000", "Rp 60.000", "Rp 100.000", "Rp 70.000"], answer: "Rp 80.000", exp: "Selisih perbandingan = 5 - 3 = 2. Total perbandingan = 3 + 5 = 8. Total uang = (8 / 2) x Rp 20.000 = Rp 80.000." }
+        ]
+    },
+    SMP: {
+        LOTS: [
+            { q: "Bentuk sederhana dari 3x + 5y - 2x + y adalah...", options: ["x + 6y", "5x + 6y", "x + 4y", "5x + 4y"], answer: "x + 6y", exp: "Kelompokkan suku sejenis: (3x - 2x) + (5y + y) = x + 6y." },
+            { q: "Jika 2x - 4 = 10, maka nilai x adalah...", options: ["7", "6", "8", "5"], answer: "7", exp: "2x = 10 + 4 => 2x = 14 => x = 7." },
+            { q: "Hasil dari (-3)³ adalah...", options: ["-27", "27", "-9", "9"], answer: "-27", exp: "(-3) x (-3) x (-3) = -27." }
+        ],
+        MOTS: [
+            { q: "Hasil dari (2x + 3)(x - 4) adalah...", options: ["2x² - 5x - 12", "2x² + 5x - 12", "2x² - 11x - 12", "2x² - 5x + 12"], answer: "2x² - 5x - 12", exp: "Perkalian suku dua: 2x(x) + 2x(-4) + 3(x) + 3(-4) = 2x² - 8x + 3x - 12 = 2x² - 5x - 12." },
+            { q: "Sebuah tangga sepanjang 5 meter disandarkan ke tembok. Jarak kaki tangga ke tembok 3 meter. Tinggi tembok yang dicapai tangga adalah...", options: ["4 meter", "3.5 meter", "4.5 meter", "2 meter"], answer: "4 meter", exp: "Gunakan Teorema Pythagoras: t = √(5² - 3²) = √(25 - 9) = √16 = 4 meter." },
+            { q: "Gradien garis yang melalui titik (2, 3) dan (4, 7) adalah...", options: ["2", "3", "1/2", "4"], answer: "2", exp: "m = (y2 - y1) / (x2 - x1) = (7 - 3) / (4 - 2) = 4 / 2 = 2." }
+        ],
+        HOTS: [
+            { q: "Suatu fungsi f(x) = ax + b. Jika f(2) = 7 dan f(-1) = 1, berapakah nilai dari f(5)?", options: ["13", "11", "15", "12"], answer: "13", exp: "Eliminasi: 2a+b=7 dan -a+b=1 => 3a=6 => a=2, b=3. Maka f(x)=2x+3. f(5) = 2(5)+3 = 13." },
+            { q: "Harga 2 buku dan 3 pensil Rp 19.000. Harga 1 buku dan 4 pensil Rp 17.000. Berapa harga 1 buku dan 1 pensil?", options: ["Rp 9.000", "Rp 8.000", "Rp 10.000", "Rp 7.500"], answer: "Rp 9.000", exp: "Sistem SPLDV: 1 buku = Rp 5.000, 1 pensil = Rp 4.000. Total 1 buku + 1 pensil = Rp 9.000." },
+            { q: "Dalam sebuah kelompok terdapat 30 siswa. 18 siswa suka matematika, 15 siswa suka bahasa Inggris, dan 5 siswa tidak suka keduanya. Banyak siswa yang suka kedua mata pelajaran tersebut adalah...", options: ["8 siswa", "10 siswa", "6 siswa", "12 siswa"], answer: "8 siswa", exp: "Total yang suka minimal satu pelajaran = 30 - 5 = 25. Suka keduanya = (18 + 15) - 25 = 33 - 25 = 8 siswa." }
+        ]
+    }
+};
+
+// GAME STATE
+let studentName = "";
+let selectedGrade = "";
+let currentStage = 0; // 0 to 8 (Total 9 Stage)
+let lives = 3;
+let score = 0;
+let activeQuestionSet = [];
+let currentQuestion = null;
+
+// Shuffle Array Helper
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function startGame() {
+    studentName = document.getElementById('studentName').value.trim();
+    selectedGrade = document.getElementById('gradeSelect').value;
+
+    if(!studentName) {
+        alert("Silakan masukkan nama siswa terlebih dahulu!");
+        return;
+    }
+
+    // Persiapkan 9 Soal (3 LOTS, 3 MOTS, 3 HOTS)
+    const bank = QUESTION_BANK[selectedGrade];
+    activeQuestionSet = [
+        ...shuffle([...bank.LOTS]).slice(0, 3).map(q => ({...q, level: 'LOTS', pts: 100})),
+        ...shuffle([...bank.MOTS]).slice(0, 3).map(q => ({...q, level: 'MOTS', pts: 150})),
+        ...shuffle([...bank.HOTS]).slice(0, 3).map(q => ({...q, level: 'HOTS', pts: 200}))
+    ];
+
+    currentStage = 0;
+    lives = 3;
+    score = 0;
+
+    renderLives();
+    renderStageMap();
+    showScreen('gameScreen');
+    loadQuestion();
+}
+
+function renderLives() {
+    let html = '';
+    for(let i=0; i<3; i++) {
+        html += i < lives ? '<i class="fas fa-heart"></i> ' : '<i class="far fa-heart" style="opacity:0.3;"></i> ';
+    }
+    document.getElementById('livesContainer').innerHTML = html;
+}
+
+function renderStageMap() {
+    let html = '';
+    for(let i=0; i<9; i++) {
+        let cls = '';
+        if(i < currentStage) cls = 'passed';
+        else if(i === currentStage) cls = 'active';
+        html += `<div class="stage-node ${cls}">${i+1}</div>`;
+    }
+    document.getElementById('stageMap').innerHTML = html;
+}
+
+function loadQuestion() {
+    renderStageMap();
+    currentQuestion = activeQuestionSet[currentStage];
+    
+    // Badge Setup
+    const badge = document.getElementById('badgeLevel');
+    badge.innerText = currentQuestion.level;
+    badge.className = `badge-level badge-${currentQuestion.level.toLowerCase()}`;
+
+    document.getElementById('questionText').innerText = currentQuestion.q;
+
+    // Shuffle Options
+    const shuffledOptions = shuffle([...currentQuestion.options]);
+    let optionsHtml = '';
+    shuffledOptions.forEach(opt => {
+        optionsHtml += `<button class="option-btn" onclick="checkAnswer('${opt}')">${opt}</button>`;
+    });
+    document.getElementById('optionsGrid').innerHTML = optionsHtml;
+}
+
+function checkAnswer(selectedOpt) {
+    if(selectedOpt === currentQuestion.answer) {
+        // Jawaban Benar
+        score += currentQuestion.pts;
+        currentStage++;
+        if(currentStage >= 9) {
+            endGame();
+        } else {
+            loadQuestion();
+        }
+    } else {
+        // Jawaban Salah
+        lives--;
+        renderLives();
+        document.getElementById('explainText').innerText = currentQuestion.exp;
+        document.getElementById('explainModal').style.display = 'flex';
+        
+        if(lives <= 0) {
+            endGame();
+        }
+    }
+}
+
+function closeModal() {
+    document.getElementById('explainModal').style.display = 'none';
+    if(lives > 0) {
+        // Acak ulang pilihan jawaban agar tidak langsung asal tebak
+        loadQuestion();
+    }
+}
+
+function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+}
+
+function endGame() {
+    document.getElementById('explainModal').style.display = 'none';
+    showScreen('resultScreen');
+
+    document.getElementById('resultName').innerText = `Nama: ${studentName} | Tingkat: ${selectedGrade}`;
+    document.getElementById('finalScore').innerText = score;
+
+    let analysis = "";
+    if(score >= 1200) {
+        analysis = "<b>Luar Biasa!</b> Kemampuan logika Matematika kamu sangat hebat. Kamu siap menaklukkan soal-soal HOTS di sekolah!";
+    } else if(score >= 700) {
+        analysis = "<b>Bagus Sekali!</b> Pemahaman konsep dasar kamu sudah kuat. Dengan sedikit bimbingan trik HOTS di Dywan Learning Center, nilaimu bisa makin maksimal!";
+    } else {
+        analysis = "<b>Tetap Semangat!</b> Konsep Matematika perlu dibiasakan lagi. Metode <i>I Do – We Do – You Do</i> di Dywan siap membantu kamu paham sampai bisa!";
+    }
+    document.getElementById('analysisText').innerHTML = analysis;
+
+    // Kirim Data ke Google Sheets
+    sendDataToSheets();
+}
+
+function sendDataToSheets() {
+    if(GOOGLE_SCRIPT_URL === "GANTI_DENGAN_WEB_APP_URL_KAMU") return;
+
+    const payload = {
+        nama: studentName,
+        jenjang: selectedGrade,
+        skor: score,
+        sisaNyawa: lives
+    };
+
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    }).catch(err => console.error("Gagal kirim data:", err));
+}
+</script>
+</body>
+</html>
