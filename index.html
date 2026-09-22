@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dywan Math Adventure — YANG AKAN KALAIN DAPAT</title>
+    <title>Dywan Learning Center — Bimbingan Belajar Modern</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -13,349 +13,358 @@
             --accent: #f59e0b;
             --bg-light: #f8fafc;
             --text-dark: #1e293b;
+            --text-muted: #64748b;
             --white: #ffffff;
-            --danger: #ef4444;
-            --success: #10b981;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: var(--bg-light); color: var(--text-dark); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 15px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; }
 
-        .game-container { background: var(--white); width: 100%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; border: 2px solid #e2e8f0; position: relative; }
-        
-        /* Header Game */
-        .game-header { background: var(--primary-dark); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .game-title { font-weight: 800; font-size: 1.1rem; }
-        .lives { font-size: 1.2rem; color: #f43f5e; }
+        /* Top Bar */
+        .top-bar { background-color: var(--primary-dark); color: var(--white); font-size: 0.8rem; padding: 8px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .top-bar-info span { margin-right: 15px; display: inline-flex; align-items: center; gap: 5px; }
 
-        /* Screens */
-        .screen { padding: 25px 20px; display: none; }
-        .screen.active { display: block; }
+        /* Header & Nav */
+        header { background-color: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 5%; position: relative; }
+        .logo-text h1 { font-size: 1.2rem; color: var(--primary-dark); font-weight: 800; line-height: 1.1; }
+        .logo-text p { font-size: 0.7rem; color: var(--secondary); font-weight: 700; letter-spacing: 1px; }
 
-        /* Form Input */
-        .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-weight: 700; margin-bottom: 8px; color: var(--primary-dark); }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 8px; font-size: 1rem; outline: none; }
-        
-        .btn-action { background: var(--secondary); color: var(--white); border: none; padding: 14px 20px; width: 100%; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; }
-        .btn-action:hover { background: #b45309; }
+        .menu-toggle { display: none; background: none; border: none; font-size: 1.5rem; color: var(--primary-dark); cursor: pointer; }
+        .nav-menu { display: flex; list-style: none; gap: 20px; align-items: center; }
+        .nav-menu a { font-weight: 600; font-size: 0.95rem; color: var(--text-dark); transition: 0.3s; }
+        .nav-menu a:hover { color: var(--primary); }
+        .btn-wa-nav { background: #25d366; color: var(--white) !important; padding: 8px 18px; border-radius: 20px; font-weight: 700 !important; display: inline-flex; align-items: center; gap: 8px; }
 
-        /* Stage Progress Bar */
-        .stage-map { display: flex; justify-content: space-between; margin-bottom: 20px; background: #e2e8f0; padding: 10px; border-radius: 10px; }
-        .stage-node { width: 28px; height: 28px; border-radius: 50%; background: #cbd5e1; color: var(--text-dark); display: grid; place-items: center; font-weight: 800; font-size: 0.8rem; }
-        .stage-node.active { background: var(--secondary); color: var(--white); transform: scale(1.1); }
-        .stage-node.passed { background: var(--primary); color: var(--white); }
+        /* Hero Banner */
+        .hero { background: linear-gradient(rgba(27, 67, 50, 0.88), rgba(45, 106, 79, 0.9)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1200') center/cover; color: var(--white); text-align: center; padding: 60px 20px; }
+        .hero h2 { font-size: 2rem; margin-bottom: 12px; font-weight: 800; }
+        .hero p { font-size: 1rem; max-width: 700px; margin: 0 auto 25px; opacity: 0.95; }
+        .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 700; transition: 0.3s; display: inline-block; width: 100%; max-width: 250px; text-align: center; }
+        .btn-primary { background: var(--secondary); color: var(--white); }
+        .btn-outline { border: 2px solid var(--white); color: var(--white); }
+        .btn-game { background: #e76f51; color: var(--white); border: 2px solid #e76f51; }
+        .btn-game:hover { background: #f4a261; border-color: #f4a261; }
 
-        /* Question Box */
-        .badge-level { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
-        .badge-lots { background: #dcfce7; color: #166534; }
-        .badge-mots { background: #fef3c7; color: #92400e; }
-        .badge-hots { background: #fee2e2; color: #991b1b; }
+        /* Container Sections */
+        .section { padding: 45px 5%; }
+        .section-title { text-align: center; margin-bottom: 30px; }
+        .section-title h2 { font-size: 1.75rem; color: var(--primary-dark); font-weight: 800; }
+        .section-title p { color: var(--text-muted); font-size: 0.95rem; }
 
-        .question-text { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; line-height: 1.5; color: var(--primary-dark); }
-        
-        /* Options Grid */
-        .options-grid { display: grid; gap: 10px; }
-        .option-btn { background: #f1f5f9; border: 2px solid #cbd5e1; padding: 12px 15px; border-radius: 8px; text-align: left; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
-        .option-btn:hover { border-color: var(--primary); background: #e2e8f0; }
+        /* Metode Belajar */
+        .metode-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px; }
+        .metode-card { background: var(--white); padding: 20px; border-radius: 12px; border-left: 5px solid var(--secondary); box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .metode-num { background: var(--secondary); color: var(--white); width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; margin-bottom: 12px; }
+        .metode-card h3 { color: var(--primary-dark); margin-bottom: 8px; }
 
-        /* Modal Pembahasan */
-        .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10; padding: 20px; justify-content: center; align-items: center; }
-        .modal-content { background: var(--white); padding: 20px; border-radius: 12px; text-align: center; }
-        .modal-content h3 { color: var(--danger); margin-bottom: 10px; }
-        .modal-content p { font-size: 0.95rem; margin-bottom: 15px; text-align: left; background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 4px solid var(--secondary); }
+        /* Mentors & Materi Grid */
+        .two-col-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .info-box { background: var(--white); padding: 22px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .info-box h3 { color: var(--primary-dark); margin-bottom: 15px; border-bottom: 2px solid var(--bg-light); padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .mentor-list li { list-style: none; margin-bottom: 10px; font-weight: 600; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .mentor-list i { color: var(--secondary); }
+        .materi-badge { background: #e2e8f0; color: var(--text-dark); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-right: 4px; display: inline-block; margin-top: 6px; }
 
-        /* Scorecard */
-        .score-box { background: #f1f5f9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-        .score-num { font-size: 2.5rem; font-weight: 800; color: var(--primary); }
+        /* Fitur Filter Jadwal Interaktif */
+        .filter-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .filter-btn { padding: 8px 18px; border-radius: 20px; border: 2px solid var(--primary); background: transparent; color: var(--primary-dark); font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.85rem; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: var(--white); }
+
+        /* Sesi Belajar Cards */
+        .sesi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .sesi-card { background: var(--white); border-radius: 10px; padding: 18px; border-top: 4px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.04); transition: 0.3s; }
+        .sesi-card.hide { display: none; }
+        .sesi-card h4 { color: var(--primary-dark); font-size: 1rem; margin-bottom: 6px; }
+        .sesi-time { color: var(--secondary); font-weight: 700; font-size: 0.85rem; margin-bottom: 4px; }
+        .sesi-days { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; }
+
+        /* Biaya Box */
+        .biaya-box { background: var(--primary-dark); color: var(--white); border-radius: 12px; padding: 25px 15px; margin-top: 25px; text-align: center; }
+        .biaya-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 15px 0; }
+        .biaya-item h4 { font-size: 0.9rem; opacity: 0.9; }
+        .biaya-item p { font-size: 1.5rem; font-weight: 800; color: #facc15; }
+
+        /* Section Galeri Foto Kegiatan */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+        .gallery-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: 0.3s; }
+        .gallery-card:hover { transform: translateY(-4px); }
+        .gallery-card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+        .gallery-info { padding: 15px; }
+        .gallery-info h4 { color: var(--primary-dark); font-size: 1rem; margin-bottom: 5px; }
+        .gallery-info p { color: var(--text-muted); font-size: 0.85rem; }
+
+        /* Facilities */
+        .facility-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-top: 15px; }
+        .facility-item { background: #ecfdf5; border: 1px solid #a7f3d0; color: var(--primary-dark); padding: 12px; border-radius: 8px; font-weight: 700; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; }
+
+        /* Floating WhatsApp Button */
+        .float-wa { position: fixed; width: 55px; height: 55px; bottom: 20px; right: 20px; background-color: #25d366; color: #FFF; border-radius: 50px; text-align: center; font-size: 30px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); z-index: 9999; display: grid; place-items: center; }
+
+        /* Footer */
+        footer { background: #0f172a; color: var(--white); padding: 30px 5% 20px; margin-top: 40px; text-align: center; }
+        footer p { font-size: 0.85rem; color: #94a3b8; }
+
+        @media(max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: var(--white); flex-direction: column; padding: 20px; box-shadow: 0 10px 15px rgba(0,0,0,0.1); gap: 15px; text-align: center; }
+            .nav-menu.active { display: flex; }
+            .top-bar { justify-content: center; text-align: center; }
+            .hero h2 { font-size: 1.6rem; }
+            .hero p { font-size: 0.9rem; }
+        }
     </style>
 </head>
 <body>
 
-<div class="game-container">
-    <!-- Header -->
-    <div class="game-header">
-        <div class="game-title"><i class="fas fa-brain"></i> Dywan Math Challenge</div>
-        <div class="lives" id="livesContainer"><i class="fas fa-heart"></i> <i class="fas fa-heart"></i> <i class="fas fa-heart"></i></div>
-    </div>
+    <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20ingin%20mendaftar%20bimbel" class="float-wa" target="_blank" title="Chat WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-    <!-- Screen 1: Start Game -->
-    <div class="screen active" id="startScreen">
-        <h2 style="color:var(--primary-dark); margin-bottom: 10px; text-align:center;">Uji Kemampuan Matematika!</h2>
-        <p style="text-align:center; font-size:0.9rem; color:#64748b; margin-bottom: 20px;">Rasakan metode pembelajaran bertahap <b>I Do – We Do – You Do</b> dari Dywan Learning Center.</p>
-        
-        <div class="form-group">
-            <label>Nama Siswa:</label>
-            <input type="text" id="studentName" placeholder="Masukkan nama lengkap...">
+    <div class="top-bar">
+        <div class="top-bar-info">
+            <span><i class="fab fa-whatsapp"></i> 0888 6689 320</span>
+            <span><i class="fas fa-map-marker-alt"></i> Kampung Kalikan Rt 03 Rw 05 Desa Kedungjati</span>
         </div>
-        <div class="form-group">
-            <label>Pilih Tingkat Sekolah:</label>
-            <select id="gradeSelect">
-                <option value="SD_LOW">SD Kelas 1 – 3 (Kelas Rendah)</option>
-                <option value="SD_HIGH">SD Kelas 4 – 6 (Kelas Tinggi)</option>
-                <option value="SMP">SMP Kelas 7 – 9</option>
-            </select>
-        </div>
-        <button class="btn-action" onclick="startGame()">Mulai Petualangan <i class="fas fa-arrow-right"></i></button>
-    </div>
-
-    <!-- Screen 2: Gameplay -->
-    <div class="screen" id="gameScreen">
-        <!-- Stage Progress Map (9 Stage) -->
-        <div class="stage-map" id="stageMap">
-            <!-- Dynamic Stage Nodes -->
-        </div>
-
-        <span class="badge-level" id="badgeLevel">LOTS</span>
-        <div class="question-text" id="questionText">Loading Soal...</div>
-
-        <div class="options-grid" id="optionsGrid">
-            <!-- Dynamic Options -->
+        <div>
+            <span><i class="fas fa-clock"></i> 12x Pertemuan / Bulan</span>
         </div>
     </div>
 
-    <!-- Screen 3: Scorecard & Result -->
-    <div class="screen" id="resultScreen">
-        <h2 style="text-align:center; color:var(--primary-dark);">Hasil Evaluasi Belajar</h2>
-        <p style="text-align:center; font-size:0.85rem; color:#64748b; margin-bottom: 15px;" id="resultName"></p>
-        
-        <div class="score-box">
-            <div>Total Skor Kamu:</div>
-            <div class="score-num" id="finalScore">0</div>
+    <header>
+        <div class="navbar">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1>DYWAN LEARNING CENTER</h1>
+                    <p>BIMBINGAN BELAJAR BERKUALITAS</p>
+                </div>
+            </div>
+            <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle Navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#metode" onclick="toggleMenu()">Metode</a></li>
+                <li><a href="#mentor" onclick="toggleMenu()">Mentor & Materi</a></li>
+                <li><a href="#jadwal" onclick="toggleMenu()">Sesi Belajar</a></li>
+                <li><a href="#galeri" onclick="toggleMenu()">Galeri</a></li>
+                <li><a href="#fasilitas" onclick="toggleMenu()">Fasilitas</a></li>
+                <li><a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20ingin%20mendaftar%20bimbel" target="_blank" class="btn-wa-nav"><i class="fab fa-whatsapp"></i> Hubungi Kami</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h2>Metode Belajar I Do – We Do – You Do</h2>
+        <p>Dywan Learning Center menerapkan metode pembelajaran bertahap agar setiap siswa memahami konsep secara mendalam, bukan sekadar menghafal.</p>
+        <div class="hero-btns">
+            <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20ingin%20tanya%20informasi%20pendaftaran" target="_blank" class="btn btn-primary">Daftar Sekarang</a>
+            <a href="https://bimble-dywan.github.io/dywan-math-game/" target="_blank" class="btn btn-game"><i class="fas fa-gamepad"></i> Coba Game Interaktif</a>
+            <a href="#jadwal" class="btn btn-outline">Lihat Jadwal Sesi</a>
+        </div>
+    </section>
+
+    <section class="section" id="metode">
+        <div class="section-title">
+            <h2>Apa Itu I Do – We Do – You Do?</h2>
+            <p>3 Langkah sistematis untuk membangun pemahaman dan rasa percaya diri siswa</p>
+        </div>
+        <div class="metode-grid">
+            <div class="metode-card">
+                <div class="metode-num">01</div>
+                <h3>I Do</h3>
+                <p>Pengajar memberikan contoh dan menjelaskan langkah penyelesaian soal secara lengkap dan jelas.</p>
+            </div>
+            <div class="metode-card">
+                <div class="metode-num">02</div>
+                <h3>We Do</h3>
+                <p>Pengajar dan siswa mengerjakan contoh soal serupa secara bersama-sama dengan bimbingan langsung.</p>
+            </div>
+            <div class="metode-card">
+                <div class="metode-num">03</div>
+                <h3>You Do</h3>
+                <p>Siswa menyelesaikan soal secara mandiri untuk mengukur pemahaman dan membangun rasa percaya diri.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="mentor" style="background:#f1f5f9;">
+        <div class="section-title">
+            <h2>Why Choose Us?</h2>
+            <p>Pengajar profesional dan materi terstruktur sesuai jenjang sekolah</p>
+        </div>
+        <div class="two-col-grid">
+            <div class="info-box">
+                <h3><i class="fas fa-user-graduate"></i> Tim Mentor Pengajar</h3>
+                <ul class="mentor-list">
+                    <li><i class="fas fa-check-circle"></i> Bravura Auriga Dywan, S.Kom. Gr</li>
+                    <li><i class="fas fa-check-circle"></i> Almahida Aureola Dywan, S.Pd. Gr</li>
+                    <li><i class="fas fa-check-circle"></i> Adil Aurora Dywan, S.Pd.</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3><i class="fas fa-book-open"></i> Materi Pelajaran</h3>
+                <h4 style="margin-top:8px; color:var(--primary); font-size:0.95rem;">Jenjang SD:</h4>
+                <span class="materi-badge">Matematika</span>
+                <span class="materi-badge">Bahasa Inggris</span>
+                <span class="materi-badge">TKA Matematika (Khusus Kelas 6)</span>
+
+                <h4 style="margin-top:12px; color:var(--primary); font-size:0.95rem;">Jenjang SMP:</h4>
+                <span class="materi-badge">Matematika</span>
+                <span class="materi-badge">Fisika</span>
+                <span class="materi-badge">TKA Matematika (Khusus Kelas 9)</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sesi Belajar & Fitur Filter Interaktif -->
+    <section class="section" id="jadwal">
+        <div class="section-title">
+            <h2>Jadwal Sesi Belajar</h2>
+            <p>12x Pertemuan / Bulan (Maksimal 6 Siswa / Sesi)</p>
         </div>
 
-        <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:12px; border-radius:8px; margin-bottom:20px; font-size:0.9rem;" id="analysisText">
-            <!-- Dynamic Analysis -->
+        <!-- Filter Tab Buttons -->
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterJadwal('all')">Semua Jenjang</button>
+            <button class="filter-btn" onclick="filterJadwal('sd-rendah')">SD Kelas 1 - 3</button>
+            <button class="filter-btn" onclick="filterJadwal('sd-tinggi')">SD Kelas 4 - 6</button>
+            <button class="filter-btn" onclick="filterJadwal('smp')">SMP</button>
         </div>
 
-        <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20sudah%20selesai%20mencoba%20Game%20Matematika" target="_blank" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:#25d366;">
-            <i class="fab fa-whatsapp"></i> Konsultasi Hasil via WA
-        </a>
-    </div>
-
-    <!-- Modal Pembahasan (Jika Salah Jawab) -->
-    <div class="modal" id="explainModal">
-        <div class="modal-content">
-            <h3><i class="fas fa-lightbulb"></i> Metode "I Do" Dywan</h3>
-            <p id="explainText">Pembahasan akan muncul di sini.</p>
-            <button class="btn-action" onclick="closeModal()">Coba Lagi <i class="fas fa-redo"></i></button>
+        <div class="sesi-grid">
+            <div class="sesi-card" data-category="sd-rendah">
+                <h4>SD KELAS 1</h4>
+                <div class="sesi-days">SENIN - RABU - JUM'AT</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 13.00 - 14.00</div>
+            </div>
+            <div class="sesi-card" data-category="sd-rendah">
+                <h4>SD KELAS 2</h4>
+                <div class="sesi-days">SELASA - KAMIS - SABTU</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 13.00 - 14.00</div>
+            </div>
+            <div class="sesi-card" data-category="sd-rendah">
+                <h4>SD KELAS 3</h4>
+                <div class="sesi-days">SENIN - RABU - JUM'AT</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 14.00 - 15.00</div>
+            </div>
+            <div class="sesi-card" data-category="sd-tinggi">
+                <h4>SD KELAS 4</h4>
+                <div class="sesi-days">SELASA - KAMIS - SABTU</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 14.00 - 15.00</div>
+            </div>
+            <div class="sesi-card" data-category="sd-tinggi">
+                <h4>SD KELAS 5</h4>
+                <div class="sesi-days">SENIN - RABU - JUM'AT</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 15.00 - 16.00</div>
+            </div>
+            <div class="sesi-card" data-category="sd-tinggi">
+                <h4>SD KELAS 6</h4>
+                <div class="sesi-days">SELASA - KAMIS - SABTU</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 15.00 - 16.00</div>
+            </div>
+            <div class="sesi-card" data-category="smp" style="border-top-color: var(--secondary);">
+                <h4>SMP (Grup A)</h4>
+                <div class="sesi-days">SENIN - RABU - JUM'AT</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 16.00 - 17.00</div>
+            </div>
+            <div class="sesi-card" data-category="smp" style="border-top-color: var(--secondary);">
+                <h4>SMP (Grup B)</h4>
+                <div class="sesi-days">SELASA - KAMIS - SABTU</div>
+                <div class="sesi-time"><i class="far fa-clock"></i> JAM 16.00 - 17.00</div>
+            </div>
         </div>
-    </div>
-</div>
 
-<script>
-// CONFIG: Ganti URL ini dengan Web App URL dari Google Apps Script kamu!
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLDQOK8wTyy1gXdh0HXkeB-79DC5zy3nkEYk57k7eB1i3qkUNGDP0qwL11MnObRnHDkw/exec";
+        <div class="biaya-box">
+            <h3>Biaya Administrasi Belajar</h3>
+            <div class="biaya-grid">
+                <div class="biaya-item">
+                    <h4>JENJANG SD</h4>
+                    <p>Rp 100.000 / Bln</p>
+                </div>
+                <div class="biaya-item">
+                    <h4>JENJANG SMP</h4>
+                    <p>Rp 150.000 / Bln</p>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; opacity: 0.85;"><i class="fas fa-info-circle"></i> Setiap sesi dibatasi maksimal berisi 6 siswa.</p>
+        </div>
+    </section>
 
-// BANK SOAL (LOTS, MOTS, HOTS per Jenjang - Masing-masing 3 Soal)
-const QUESTION_BANK = {
-    SD_LOW: {
-        LOTS: [
-            { q: "Hasil dari 15 + 28 adalah...", options: ["43", "41", "33", "45"], answer: "43", exp: "15 + 28 = 43. Tambahkan satuan terlebih dahulu (5+8=13), simpan 1 ke puluhan." },
-            { q: "Berapa hasil dari 7 x 6?", options: ["42", "36", "48", "40"], answer: "42", exp: "7 dikali 6 sama artinya dengan menjumlahkan angka 7 sebanyak 6 kali = 42." },
-            { q: "Hasil dari 50 - 18 adalah...", options: ["32", "38", "22", "34"], answer: "32", exp: "50 - 18 = 32." }
-        ],
-        MOTS: [
-            { q: "Budi punya 3 kotak pensil. Tiap kotak berisi 8 pensil. Berapa total pensil Budi?", options: ["24", "11", "18", "32"], answer: "24", exp: "Jumlah total = 3 kotak x 8 pensil = 24 pensil." },
-            { q: "Ibu membeli 35 kue, lalu dibagikan sama rata ke 5 anaknya. Tiap anak mendapat...", options: ["7 kue", "6 kue", "8 kue", "5 kue"], answer: "7 kue", exp: "35 kue : 5 anak = 7 kue per anak." },
-            { q: "Paman memiliki 4 kantong kelereng. Setiap kantong berisi 9 kelereng. Berapa total kelereng paman?", options: ["36", "32", "40", "28"], answer: "36", exp: "4 kantong x 9 kelereng = 36 kelereng." }
-        ],
-        HOTS: [
-            { q: "Aku sebuah angka. Jika aku ditambah 12 lalu dikurangi 5, hasilnya 20. Angka berapakah aku?", options: ["13", "15", "10", "12"], answer: "13", exp: "Hitung mundur: 20 + 5 = 25, lalu 25 - 12 = 13. Jadi angka awal adalah 13." },
-            { q: "Dua tahun lalu umur Ani 7 tahun. Berapa umur Ani 3 tahun yang akan datang?", options: ["12 tahun", "10 tahun", "11 tahun", "9 tahun"], answer: "12 tahun", exp: "Umur Ani sekarang = 7 + 2 = 9 tahun. 3 tahun lagi = 9 + 3 = 12 tahun." },
-            { q: "Di sebuah tempat parkir terdapat 5 sepeda motor dan 3 mobil. Berapa jumlah seluruh roda kendaraan di tempat parkir tersebut?", options: ["22 roda", "16 roda", "20 roda", "24 roda"], answer: "22 roda", exp: "(5 motor x 2 roda) + (3 mobil x 4 roda) = 10 + 12 = 22 roda." }
-        ]
-    },
-    SD_HIGH: {
-        LOTS: [
-            { q: "Hasil dari -12 + 25 adalah...", options: ["13", "-13", "37", "-37"], answer: "13", exp: "Penjumlahan beda tanda: 25 - 12 = 13 (mengikuti tanda angka terbesar)." },
-            { q: "KPK dari 6 dan 8 adalah...", options: ["24", "12", "48", "16"], answer: "24", exp: "Kelipatan 6: 6, 12, 18, 24... Kelipatan 8: 8, 16, 24... Kelipatan terkecil yang sama = 24." },
-            { q: "Hasil dari 12² adalah...", options: ["144", "124", "134", "154"], answer: "144", exp: "12 x 12 = 144." }
-        ],
-        MOTS: [
-            { q: "Sebuah persegi memiliki luas 144 cm². Berapa keliling persegi tersebut?", options: ["48 cm", "36 cm", "24 cm", "12 cm"], answer: "48 cm", exp: "Sisi = √144 = 12 cm. Keliling = 4 x sisi = 4 x 12 = 48 cm." },
-            { q: "Bentuk sederhana dari pecahan 18/24 adalah...", options: ["3/4", "2/3", "4/5", "1/2"], answer: "3/4", exp: "Bagi pembilang dan penyebut dengan FPB-nya (yaitu 6): 18:6 = 3, 24:6 = 4." },
-            { q: "Sebuah bak air berisi 120 liter. Jika dialirkan dengan debit 20 liter/menit, berapa menit waktu yang dibutuhkan hingga habis?", options: ["6 menit", "5 menit", "8 menit", "10 menit"], answer: "6 menit", exp: "Waktu = Volume / Debit = 120 / 20 = 6 menit." }
-        ],
-        HOTS: [
-            { q: "Sebuah bus berangkat pukul 07.00 dengan kecepatan 60 km/jam menuju kota B sejauh 180 km. Pukul berapa bus tiba?", options: ["10.00", "09.30", "10.30", "09.00"], answer: "10.00", exp: "Waktu = Jarak / Kecepatan = 180 / 60 = 3 jam. Tiba pukul 07.00 + 3 jam = 10.00." },
-            { q: "Rata-rata nilai 4 siswa adalah 80. Jika nilai Budi digabungkan, rata-ratanya menjadi 82. Berapa nilai Budi?", options: ["90", "88", "85", "92"], answer: "90", exp: "Total nilai 4 siswa = 4 x 80 = 320. Total nilai 5 siswa = 5 x 82 = 410. Nilai Budi = 410 - 320 = 90." },
-            { q: "Perbandingan uang Andi dan Budi 3 : 5. Jika selisih uang mereka Rp 20.000, berapa total uang mereka berdua?", options: ["Rp 80.000", "Rp 60.000", "Rp 100.000", "Rp 70.000"], answer: "Rp 80.000", exp: "Selisih perbandingan = 5 - 3 = 2. Total perbandingan = 3 + 5 = 8. Total uang = (8 / 2) x Rp 20.000 = Rp 80.000." }
-        ]
-    },
-    SMP: {
-        LOTS: [
-            { q: "Bentuk sederhana dari 3x + 5y - 2x + y adalah...", options: ["x + 6y", "5x + 6y", "x + 4y", "5x + 4y"], answer: "x + 6y", exp: "Kelompokkan suku sejenis: (3x - 2x) + (5y + y) = x + 6y." },
-            { q: "Jika 2x - 4 = 10, maka nilai x adalah...", options: ["7", "6", "8", "5"], answer: "7", exp: "2x = 10 + 4 => 2x = 14 => x = 7." },
-            { q: "Hasil dari (-3)³ adalah...", options: ["-27", "27", "-9", "9"], answer: "-27", exp: "(-3) x (-3) x (-3) = -27." }
-        ],
-        MOTS: [
-            { q: "Hasil dari (2x + 3)(x - 4) adalah...", options: ["2x² - 5x - 12", "2x² + 5x - 12", "2x² - 11x - 12", "2x² - 5x + 12"], answer: "2x² - 5x - 12", exp: "Perkalian suku dua: 2x(x) + 2x(-4) + 3(x) + 3(-4) = 2x² - 8x + 3x - 12 = 2x² - 5x - 12." },
-            { q: "Sebuah tangga sepanjang 5 meter disandarkan ke tembok. Jarak kaki tangga ke tembok 3 meter. Tinggi tembok yang dicapai tangga adalah...", options: ["4 meter", "3.5 meter", "4.5 meter", "2 meter"], answer: "4 meter", exp: "Gunakan Teorema Pythagoras: t = √(5² - 3²) = √(25 - 9) = √16 = 4 meter." },
-            { q: "Gradien garis yang melalui titik (2, 3) dan (4, 7) adalah...", options: ["2", "3", "1/2", "4"], answer: "2", exp: "m = (y2 - y1) / (x2 - x1) = (7 - 3) / (4 - 2) = 4 / 2 = 2." }
-        ],
-        HOTS: [
-            { q: "Suatu fungsi f(x) = ax + b. Jika f(2) = 7 dan f(-1) = 1, berapakah nilai dari f(5)?", options: ["13", "11", "15", "12"], answer: "13", exp: "Eliminasi: 2a+b=7 dan -a+b=1 => 3a=6 => a=2, b=3. Maka f(x)=2x+3. f(5) = 2(5)+3 = 13." },
-            { q: "Harga 2 buku dan 3 pensil Rp 19.000. Harga 1 buku dan 4 pensil Rp 17.000. Berapa harga 1 buku dan 1 pensil?", options: ["Rp 9.000", "Rp 8.000", "Rp 10.000", "Rp 7.500"], answer: "Rp 9.000", exp: "Sistem SPLDV: 1 buku = Rp 5.000, 1 pensil = Rp 4.000. Total 1 buku + 1 pensil = Rp 9.000." },
-            { q: "Dalam sebuah kelompok terdapat 30 siswa. 18 siswa suka matematika, 15 siswa suka bahasa Inggris, dan 5 siswa tidak suka keduanya. Banyak siswa yang suka kedua mata pelajaran tersebut adalah...", options: ["8 siswa", "10 siswa", "6 siswa", "12 siswa"], answer: "8 siswa", exp: "Total yang suka minimal satu pelajaran = 30 - 5 = 25. Suka keduanya = (18 + 15) - 25 = 33 - 25 = 8 siswa." }
-        ]
-    }
-};
+    <!-- Section Galeri Foto Kegiatan & Suasana Belajar -->
+    <section class="section" id="galeri" style="background:#f1f5f9;">
+        <div class="section-title">
+            <h2>Kegiatan Belajar</h2>
+            <p>Lingkungan belajar yang ramah, berfokus pada pemahaman, dan didukung teknologi interaktif</p>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-card">
+                <img src="les1.jpeg" alt="Bimbingan Intensif">
+                <div class="gallery-info">
+                    <h4>Bimbingan Kelompok Kecil</h4>
+                    <p>Maksimal 6 siswa per kelas untuk memastikan setiap anak mendapat perhatian pengajar secara penuh.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <img src="les2.jpeg" alt="Pemahaman Konsep">
+                <div class="gallery-info">
+                    <h4>Metode I Do – We Do – You Do</h4>
+                    <p>Pendekatan belajar terstruktur dari contoh, pengerjaan bersama, hingga latihan mandiri.</p>
+                </div>
+            </div>
+            <div class="gallery-card">
+                <img src="les3.jpg" alt="Media Game Interaktif">
+                <div class="gallery-info">
+                    <h4>Game Matematika Interaktif</h4>
+                    <p>Siswa diajak berlatih soal LOTS, MOTS, dan HOTS dengan suasana bermain yang menyenangkan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-// GAME STATE
-let studentName = "";
-let selectedGrade = "";
-let currentStage = 0; // 0 to 8 (Total 9 Stage)
-let lives = 3;
-let score = 0;
-let activeQuestionSet = [];
-let currentQuestion = null;
+    <section class="section" id="fasilitas">
+        <div class="section-title">
+            <h2>Additional Facilities</h2>
+            <p>Fasilitas tambahan gratis untuk seluruh siswa</p>
+        </div>
+        <div class="facility-list">
+            <div class="facility-item"><i class="fas fa-check-circle"></i> Bimbingan Tugas Sekolah</div>
+            <div class="facility-item"><i class="fas fa-check-circle"></i> Bedah Kisi-Kisi Ujian</div>
+            <div class="facility-item"><i class="fas fa-check-circle"></i> Latihan Soal Berbasis Kisi-Kisi</div>
+        </div>
+    </section>
 
-// Shuffle Array Helper
-function shuffle(array) {
-    return array.sort(() => Math.random() - 0.5);
-}
+    <footer>
+        <p><strong>Dywan Learning Center</strong></p>
+        <p style="margin-top:4px;">Kp Kalikan RT 03 RW 05 Desa Kedungjati</p>
+        <p style="margin-top:4px;">Hubungi: 0888 6689 320 (Bravura)</p>
+        <p style="margin-top:15px; font-size:0.75rem;">&copy; 2026 Dywan Learning Center.</p>
+    </footer>
 
-function startGame() {
-    studentName = document.getElementById('studentName').value.trim();
-    selectedGrade = document.getElementById('gradeSelect').value;
-
-    if(!studentName) {
-        alert("Silakan masukkan nama siswa terlebih dahulu!");
-        return;
-    }
-
-    // Persiapkan 9 Soal (3 LOTS, 3 MOTS, 3 HOTS)
-    const bank = QUESTION_BANK[selectedGrade];
-    activeQuestionSet = [
-        ...shuffle([...bank.LOTS]).slice(0, 3).map(q => ({...q, level: 'LOTS', pts: 100})),
-        ...shuffle([...bank.MOTS]).slice(0, 3).map(q => ({...q, level: 'MOTS', pts: 150})),
-        ...shuffle([...bank.HOTS]).slice(0, 3).map(q => ({...q, level: 'HOTS', pts: 200}))
-    ];
-
-    currentStage = 0;
-    lives = 3;
-    score = 0;
-
-    renderLives();
-    renderStageMap();
-    showScreen('gameScreen');
-    loadQuestion();
-}
-
-function renderLives() {
-    let html = '';
-    for(let i=0; i<3; i++) {
-        html += i < lives ? '<i class="fas fa-heart"></i> ' : '<i class="far fa-heart" style="opacity:0.3;"></i> ';
-    }
-    document.getElementById('livesContainer').innerHTML = html;
-}
-
-function renderStageMap() {
-    let html = '';
-    for(let i=0; i<9; i++) {
-        let cls = '';
-        if(i < currentStage) cls = 'passed';
-        else if(i === currentStage) cls = 'active';
-        html += `<div class="stage-node ${cls}">${i+1}</div>`;
-    }
-    document.getElementById('stageMap').innerHTML = html;
-}
-
-function loadQuestion() {
-    renderStageMap();
-    currentQuestion = activeQuestionSet[currentStage];
-    
-    // Badge Setup
-    const badge = document.getElementById('badgeLevel');
-    badge.innerText = currentQuestion.level;
-    badge.className = `badge-level badge-${currentQuestion.level.toLowerCase()}`;
-
-    document.getElementById('questionText').innerText = currentQuestion.q;
-
-    // Shuffle Options
-    const shuffledOptions = shuffle([...currentQuestion.options]);
-    let optionsHtml = '';
-    shuffledOptions.forEach(opt => {
-        optionsHtml += `<button class="option-btn" onclick="checkAnswer('${opt}')">${opt}</button>`;
-    });
-    document.getElementById('optionsGrid').innerHTML = optionsHtml;
-}
-
-function checkAnswer(selectedOpt) {
-    if(selectedOpt === currentQuestion.answer) {
-        // Jawaban Benar
-        score += currentQuestion.pts;
-        currentStage++;
-        if(currentStage >= 9) {
-            endGame();
-        } else {
-            loadQuestion();
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
         }
-    } else {
-        // Jawaban Salah
-        lives--;
-        renderLives();
-        document.getElementById('explainText').innerText = currentQuestion.exp;
-        document.getElementById('explainModal').style.display = 'flex';
-        
-        if(lives <= 0) {
-            endGame();
+
+        // Fungsi Filter Jadwal Interaktif
+        function filterJadwal(category) {
+            const cards = document.querySelectorAll('.sesi-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.classList.remove('hide');
+                } else {
+                    card.classList.add('hide');
+                }
+            });
         }
-    }
-}
-
-function closeModal() {
-    document.getElementById('explainModal').style.display = 'none';
-    if(lives > 0) {
-        // Acak ulang pilihan jawaban agar tidak langsung asal tebak
-        loadQuestion();
-    }
-}
-
-function showScreen(screenId) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(screenId).classList.add('active');
-}
-
-function endGame() {
-    document.getElementById('explainModal').style.display = 'none';
-    showScreen('resultScreen');
-
-    document.getElementById('resultName').innerText = `Nama: ${studentName} | Tingkat: ${selectedGrade}`;
-    document.getElementById('finalScore').innerText = score;
-
-    let analysis = "";
-    if(score >= 1200) {
-        analysis = "<b>Luar Biasa!</b> Kemampuan logika Matematika kamu sangat hebat. Kamu siap menaklukkan soal-soal HOTS di sekolah!";
-    } else if(score >= 700) {
-        analysis = "<b>Bagus Sekali!</b> Pemahaman konsep dasar kamu sudah kuat. Dengan sedikit bimbingan trik HOTS di Dywan Learning Center, nilaimu bisa makin maksimal!";
-    } else {
-        analysis = "<b>Tetap Semangat!</b> Konsep Matematika perlu dibiasakan lagi. Metode <i>I Do – We Do – You Do</i> di Dywan siap membantu kamu paham sampai bisa!";
-    }
-    document.getElementById('analysisText').innerHTML = analysis;
-
-    // Kirim Data ke Google Sheets
-    sendDataToSheets();
-}
-
-function sendDataToSheets() {
-    if(GOOGLE_SCRIPT_URL === "GANTI_DENGAN_WEB_APP_URL_KAMU") return;
-
-    const payload = {
-        nama: studentName,
-        jenjang: selectedGrade,
-        skor: score,
-        sisaNyawa: lives
-    };
-
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-    }).catch(err => console.error("Gagal kirim data:", err));
-}
-</script>
+    </script>
 </body>
 </html>
