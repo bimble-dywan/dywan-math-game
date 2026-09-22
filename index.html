@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dywan Math Adventure — YANG AKAN KALAIN DAPAT</title>
+    <title>Dywan Math Challenge</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -144,10 +144,10 @@
 </div>
 
 <script>
-// CONFIG: Ganti URL ini dengan Web App URL dari Google Apps Script kamu!
+// CONFIG: Web App URL dari Google Apps Script
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLDQOK8wTyy1gXdh0HXkeB-79DC5zy3nkEYk57k7eB1i3qkUNGDP0qwL11MnObRnHDkw/exec";
 
-// BANK SOAL (LOTS, MOTS, HOTS per Jenjang - Masing-masing 3 Soal)
+// BANK SOAL
 const QUESTION_BANK = {
     SD_LOW: {
         LOTS: [
@@ -205,13 +205,12 @@ const QUESTION_BANK = {
 // GAME STATE
 let studentName = "";
 let selectedGrade = "";
-let currentStage = 0; // 0 to 8 (Total 9 Stage)
+let currentStage = 0;
 let lives = 3;
 let score = 0;
 let activeQuestionSet = [];
 let currentQuestion = null;
 
-// Shuffle Array Helper
 function shuffle(array) {
     return array.sort(() => Math.random() - 0.5);
 }
@@ -225,7 +224,6 @@ function startGame() {
         return;
     }
 
-    // Persiapkan 9 Soal (3 LOTS, 3 MOTS, 3 HOTS)
     const bank = QUESTION_BANK[selectedGrade];
     activeQuestionSet = [
         ...shuffle([...bank.LOTS]).slice(0, 3).map(q => ({...q, level: 'LOTS', pts: 100})),
@@ -266,14 +264,12 @@ function loadQuestion() {
     renderStageMap();
     currentQuestion = activeQuestionSet[currentStage];
     
-    // Badge Setup
     const badge = document.getElementById('badgeLevel');
     badge.innerText = currentQuestion.level;
     badge.className = `badge-level badge-${currentQuestion.level.toLowerCase()}`;
 
     document.getElementById('questionText').innerText = currentQuestion.q;
 
-    // Shuffle Options
     const shuffledOptions = shuffle([...currentQuestion.options]);
     let optionsHtml = '';
     shuffledOptions.forEach(opt => {
@@ -284,7 +280,6 @@ function loadQuestion() {
 
 function checkAnswer(selectedOpt) {
     if(selectedOpt === currentQuestion.answer) {
-        // Jawaban Benar
         score += currentQuestion.pts;
         currentStage++;
         if(currentStage >= 9) {
@@ -293,7 +288,6 @@ function checkAnswer(selectedOpt) {
             loadQuestion();
         }
     } else {
-        // Jawaban Salah
         lives--;
         renderLives();
         document.getElementById('explainText').innerText = currentQuestion.exp;
@@ -308,7 +302,6 @@ function checkAnswer(selectedOpt) {
 function closeModal() {
     document.getElementById('explainModal').style.display = 'none';
     if(lives > 0) {
-        // Acak ulang pilihan jawaban agar tidak langsung asal tebak
         loadQuestion();
     }
 }
@@ -335,12 +328,11 @@ function endGame() {
     }
     document.getElementById('analysisText').innerHTML = analysis;
 
-    // Kirim Data ke Google Sheets
     sendDataToSheets();
 }
 
 function sendDataToSheets() {
-    if(GOOGLE_SCRIPT_URL === "GANTI_DENGAN_WEB_APP_URL_KAMU") return;
+    if(!GOOGLE_SCRIPT_URL) return;
 
     const payload = {
         nama: studentName,
