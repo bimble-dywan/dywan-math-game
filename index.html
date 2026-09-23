@@ -95,8 +95,8 @@
     <!-- Header -->
     <div class="game-header">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <a href="https://bimble-dywan.github.io/dywan-learning-center/" class="btn-back-home" title="Kembali ke Beranda">
-    <i class="fas fa-arrow-left"></i> Beranda
+            <a href="https://bimble-dywan.github.io/Web-Bimbel/" class="btn-back-home" title="Kembali ke Beranda">
+                <i class="fas fa-arrow-left"></i> Beranda
             </a>
             <div class="game-title"><i class="fas fa-brain"></i> Dywan Math Challenge</div>
         </div>
@@ -125,17 +125,12 @@
 
     <!-- Screen 2: Gameplay -->
     <div class="screen" id="gameScreen">
-        <!-- Stage Progress Map (9 Stage) -->
-        <div class="stage-map" id="stageMap">
-            <!-- Dynamic Stage Nodes -->
-        </div>
+        <div class="stage-map" id="stageMap"></div>
 
         <span class="badge-level" id="badgeLevel">LOTS</span>
         <div class="question-text" id="questionText">Loading Soal...</div>
 
-        <div class="options-grid" id="optionsGrid">
-            <!-- Dynamic Options -->
-        </div>
+        <div class="options-grid" id="optionsGrid"></div>
     </div>
 
     <!-- Screen 3: Scorecard & Result -->
@@ -148,19 +143,17 @@
             <div class="score-num" id="finalScore">0</div>
         </div>
 
-        <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:12px; border-radius:8px; margin-bottom:20px; font-size:0.9rem;" id="analysisText">
-            <!-- Dynamic Analysis -->
-        </div>
+        <div style="background:#ecfdf5; border:1px solid #a7f3d0; padding:12px; border-radius:8px; margin-bottom:20px; font-size:0.9rem;" id="analysisText"></div>
 
         <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20sudah%20selesai%20mencoba%20Game%20Matematika" target="_blank" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:#25d366; margin-bottom: 10px;">
             <i class="fab fa-whatsapp"></i> Konsultasi Hasil via WA
         </a>
-        <a href="https://bimble-dywan.github.io/dywan-learning-center/" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:var(--primary-dark);">
-    <i class="fas fa-home"></i> Kembali ke Beranda Utama
+        <a href="https://bimble-dywan.github.io/Web-Bimbel/" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:var(--primary-dark);">
+            <i class="fas fa-home"></i> Kembali ke Beranda Utama
         </a>
     </div>
 
-    <!-- Modal Pembahasan (Jika Salah Jawab) -->
+    <!-- Modal Pembahasan -->
     <div class="modal" id="explainModal">
         <div class="modal-content">
             <h3><i class="fas fa-lightbulb"></i> Metode "I Do" Dywan</h3>
@@ -171,10 +164,8 @@
 </div>
 
 <script>
-// CONFIG: Web App URL dari Google Apps Script
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyLDQOK8wTyy1gXdh0HXkeB-79DC5zy3nkEYk57k7eB1i3qkUNGDP0qwL11MnObRnHDkw/exec";
 
-// BANK SOAL
 const QUESTION_BANK = {
     SD_LOW: {
         LOTS: [
@@ -229,7 +220,6 @@ const QUESTION_BANK = {
     }
 };
 
-// GAME STATE
 let studentName = "";
 let selectedGrade = "";
 let currentStage = 0;
