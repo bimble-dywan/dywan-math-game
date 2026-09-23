@@ -24,9 +24,28 @@
         .game-container { background: var(--white); width: 100%; max-width: 600px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; border: 2px solid #e2e8f0; position: relative; }
         
         /* Header Game */
-        .game-header { background: var(--primary-dark); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .game-header { background: var(--primary-dark); color: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .game-title { font-weight: 800; font-size: 1.1rem; }
         .lives { font-size: 1.2rem; color: #f43f5e; }
+
+        /* Tombol Kembali ke Web Utama */
+        .btn-back-home {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .btn-back-home:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
         /* Screens */
         .screen { padding: 25px 20px; display: none; }
@@ -75,7 +94,12 @@
 <div class="game-container">
     <!-- Header -->
     <div class="game-header">
-        <div class="game-title"><i class="fas fa-brain"></i> Dywan Math Challenge</div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="https://bimble-dywan.github.io/dywan-learning-center/" class="btn-back-home" title="Kembali ke Beranda">
+                <i class="fas fa-arrow-left"></i> Beranda
+            </a>
+            <div class="game-title"><i class="fas fa-brain"></i> Dywan Math Challenge</div>
+        </div>
         <div class="lives" id="livesContainer"><i class="fas fa-heart"></i> <i class="fas fa-heart"></i> <i class="fas fa-heart"></i></div>
     </div>
 
@@ -128,8 +152,11 @@
             <!-- Dynamic Analysis -->
         </div>
 
-        <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20sudah%20selesai%20mencoba%20Game%20Matematika" target="_blank" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:#25d366;">
+        <a href="https://wa.me/628886689320?text=Halo%20Dywan%20Learning%20Center,%20saya%20sudah%20selesai%20mencoba%20Game%20Matematika" target="_blank" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:#25d366; margin-bottom: 10px;">
             <i class="fab fa-whatsapp"></i> Konsultasi Hasil via WA
+        </a>
+        <a href="https://bimble-dywan.github.io/dywan-learning-center/" class="btn-action" style="display:block; text-align:center; text-decoration:none; background:var(--primary-dark);">
+            <i class="fas fa-home"></i> Kembali ke Beranda Utama
         </a>
     </div>
 
